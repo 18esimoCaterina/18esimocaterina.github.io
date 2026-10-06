@@ -44,15 +44,8 @@ body{background:#e2c9b2;font-family:'Cormorant Garamond',Georgia,serif;color:var
 .name+.l{margin-top:0}
 .hint .ch{opacity:0;animation:ch .15s forwards}
 @keyframes ch{to{opacity:1}}
-.venue{display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;column-gap:2.6cqw;margin-top:.4em}
-.venue .pin{grid-row:1;grid-column:1;height:7.5cqw;width:auto}
-.venue .l.t{grid-column:2}
-.venue .l{margin:.35em 0;font-size:3.3cqw;letter-spacing:.12em;white-space:nowrap;text-align:center}
-.venue .l.t{letter-spacing:.3em}
-.venue{grid-template-columns:1fr auto 1fr;justify-content:stretch;column-gap:0;width:100%}
-.venue .pin{justify-self:end;margin-right:2.6cqw}
-.venue .l{grid-column:2;padding-left:.12em}
-.venue .l.t{padding-left:.3em}
+.l.v{font-size:min(3.3vw,1.86dvh,.9rem);letter-spacing:.12em;white-space:nowrap;padding-left:.12em}
+.l.tm{padding-left:.24em}
 </style></head><body>
 <div class="bgfill"></div><div class="stage" id="stage"><div class="tw"></div>
 
@@ -64,12 +57,10 @@ body{background:#e2c9b2;font-family:'Cormorant Garamond',Georgia,serif;color:var
 <section class="screen" id="p2">
  <div class="big a" style="animation-delay:.3s">18</div>
  <div class="name a" style="animation-delay:.8s">Caterina</div>
- <div class="row a" style="animation-delay:1.3s"><span class="side">Mercoledì</span><span class="four">4</span><span class="side">2026</span></div>
- <div class="l a" style="animation-delay:1.6s">Novembre</div>
- <div class="venue">
-  <div class="l a" style="animation-delay:1.9s">Paradiso, Capo Milazzo</div>
-  <div class="l t a" style="animation-delay:2.1s">20:30</div>
- </div>
+ <div class="l a" style="animation-delay:1.3s">2026</div>
+ <div class="row a" style="animation-delay:1.5s"><span class="side">Mercoledì</span><span class="four">4</span><span class="side">Novembre</span></div>
+ <div class="l v a" style="animation-delay:1.7s;margin-bottom:0">Paradiso, Capo Milazzo</div>
+ <div class="l tm a" style="animation-delay:1.9s;margin-top:.5em">20:30</div>
  <div class="btns a" style="animation-delay:2.4s">
   <a class="btn" id="loc" href="#" target="_blank" rel="noopener" aria-label="Location"><svg viewBox="0 0 110 110"><defs><path id="ta" d="M 21 56 A 34 34 0 0 1 89 56"/></defs><circle cx="55" cy="55" r="50" fill="rgba(250,240,224,.7)" stroke="#cfae88" stroke-width="4"/><circle cx="55" cy="55" r="46" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="1 2.5"/><text font-family="Cormorant Garamond,serif" font-weight="700" font-size="10" letter-spacing="2" fill="#7a5a42"><textPath href="#ta" startOffset="50%" text-anchor="middle">LOCATION</textPath></text><g fill="none" stroke="#7a5a42" stroke-width="2"><path d="M55 90C45 78 41 72 41 66a14 14 0 0 1 28 0c0 6-4 12-14 24z"/><circle cx="55" cy="66" r="5"/></g></svg></a>
   <a class="btn" id="rsvp" href="https://forms.gle/S2bYd6oRHwFMZrtc8" target="_blank" rel="noopener" aria-label="Conferma"><svg viewBox="0 0 110 110"><defs><path id="tb" d="M 21 56 A 34 34 0 0 1 89 56"/></defs><circle cx="55" cy="55" r="50" fill="rgba(250,240,224,.7)" stroke="#cfae88" stroke-width="4"/><circle cx="55" cy="55" r="46" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="1 2.5"/><text font-family="Cormorant Garamond,serif" font-weight="700" font-size="10" letter-spacing="2" fill="#7a5a42"><textPath href="#tb" startOffset="50%" text-anchor="middle">CONFERMA</textPath></text><g fill="none" stroke="#7a5a42" stroke-width="2"><rect x="38" y="62" width="34" height="24" rx="1"/><path d="M38 62l17 13 17-13"/><path d="M45 62v-8h20v8"/></g><text x="55" y="61" text-anchor="middle" font-size="6.5" font-weight="700" fill="#7a5a42" font-family="serif">RSVP</text></svg></a>
@@ -80,7 +71,7 @@ body{background:#e2c9b2;font-family:'Cormorant Garamond',Georgia,serif;color:var
 <script>
 // ====== DA PERSONALIZZARE ======
 
-const LOCATION_URL = "https://share.google/MB3XpKGlEJyoxhNtK"; // sito della location
+const LOCATION_URL = "https://share.google/MySI9gWBXYZhR2NHN"; // sito della location
 // ================================
 document.getElementById('loc').href=LOCATION_URL;
 const env=document.getElementById('env'),p1=document.getElementById('p1'),p2=document.getElementById('p2');
@@ -92,7 +83,27 @@ env.onclick=()=>{
   p1.style.transition=p2.style.transition='none';
   p1.style.opacity=0;p1.style.pointerEvents='none';
   p2.style.opacity=1;p2.style.pointerEvents='auto';
-  p2.classList.add('show')
+  p2.classList.add('show');eq2026()
 };
 
+
+// 2026: stessa distanza (misurata sull'inchiostro delle lettere) tra "Caterina" sopra e le linee della data sotto
+function eq2026(){
+ const y=document.querySelector('#p2 .l');if(!y)return;
+ y.style.marginTop='';y.style.marginBottom='';
+ let d=0;
+ try{
+  const nm=document.querySelector('#p2 .name'),sd=document.querySelector('#p2 .row .side');
+  const M=(el,t)=>{const cs=getComputedStyle(el),c=document.createElement('canvas').getContext('2d');c.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;if('letterSpacing'in c)c.letterSpacing=cs.letterSpacing;const m=c.measureText(t),H=el.offsetHeight;return{a:m.actualBoundingBoxAscent,d:m.actualBoundingBoxDescent,b:(H-(m.fontBoundingBoxAscent+m.fontBoundingBoxDescent))/2+m.fontBoundingBoxAscent}};
+  const n=M(nm,nm.textContent),q=M(y,y.textContent.toUpperCase());
+  const nB=nm.offsetTop+n.b+n.d,yT=y.offsetTop+q.b-q.a,yB=y.offsetTop+q.b+q.d;
+  d=((sd.offsetTop-yB)-(yT-nB))/2;
+ }catch(e){d=0}
+ if(!isFinite(d)||Math.abs(d)>80)d=0;
+ d+=16; /* 2026 piu in basso: aumenta per scendere ancora */
+ const cs=getComputedStyle(y);
+ y.style.marginTop=(parseFloat(cs.marginTop)+d)+'px';
+ y.style.marginBottom=(parseFloat(cs.marginBottom)-d)+'px';
+}
+document.fonts&&document.fonts.ready.then(eq2026);addEventListener('resize',eq2026);eq2026();
 </script></body></html>
